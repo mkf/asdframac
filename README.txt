@@ -1,0 +1,1 @@
+frama-c -wp -wp-steps 20000 -wp-depth 200 -wp-timeout 200 asdbins.c
