@@ -39,8 +39,8 @@ void sort(int w) {
 }
 
 /*@
-  logic integer count_of_upto(char sw[], char c, integer upto) = \numof(0, upto, (\lambda integer i; sw[i]==c));
-  logic integer count_of(char sw[], char c, int n) = count_of_upto(sw,c,(int)(n-1));
+  logic integer count_of_upto(char sw[10000], char c, integer upto) = \numof(0, upto, (\lambda integer i; sw[i]==c));
+  logic integer count_of(char sw[10000], char c, int n) = count_of_upto(sw,c,(int)(n-1));
   predicate samecount = \forall char cc; 0 <= cc <= 255 ==>
     count_of(s[0], cc, lens[0])==count_of(s[1], cc, lens[1]);
  */
