@@ -58,7 +58,7 @@ void sort(int w) {
     ensures \result == 0;
   behavior len_match:
     assumes lens[0]==lens[1];
-    ensures (\result == 1 && samecount) || \result == 0 && !samecount;
+    ensures \result == 1 && samecount || \result == 0 && !samecount;
   complete behaviors len_mismatch, len_match;
   disjoint behaviors len_mismatch, len_match;
  */
