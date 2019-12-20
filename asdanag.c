@@ -2,11 +2,6 @@
 
 char s[2][10000];
 
-/*@
-  axiomatic zalozenia_zadania {
-  }
- */
-
 int c;
 int n[2];
 
@@ -43,9 +38,6 @@ void sort(int w) {
   }
 }
 
-  //ghost char cou[2][255];
-  //ghost for(char cc = 0; cc <= 255; cc++) for(int i=0; i<len(s[0]); i++) for(int iw=0; iw<2; iw++) cou[iw][cc]++; 
-  //predicate samecount = \forall char cc; 0 <= cc <= 255 ==> cou[0][cc]==cou[1][cc];
 /*@
   logic integer count_of_upto(char sw[], char c, integer upto) = \numof(0, upto, (\lambda integer i; sw[i]==c));
   logic integer count_of(char sw[], char c, int n) = count_of_upto(sw,c,(int)(n-1));
@@ -77,13 +69,10 @@ int scans(char s[]) {
     s[i++] = c;
     c = getchar();
   }
-  //s[i] = 0;
   return i;
 }
 
 int main() {
-  //scanf("%s\n", s[0]);
-  //scanf("%s\n", s[1]);
   lens[0] = scans(s[0]);
   lens[1] = scans(s[1]);
   printf("%d\n", anag());
