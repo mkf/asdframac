@@ -1,24 +1,11 @@
 #include <stdio.h>
 
-char s[2][10001];
+char s[2][10000];
 
 /*@
   axiomatic zalozenia_zadania {
-    axiom null_terminated{L}:
-      \forall integer i; 0 <= i < 2 ==> \exists integer n;
-        0 <= n <= 10000 && s[n]==0;
   }
  */
-
-/*@
-  assigns \nothing;
-  ensures 0 <= \result <= 10000 && s[\result]==0;
- */
-int len(char s[]) {
-  for(int i=0; i<10000; i++)
-    if(s[i]==0) return i;
-  return -1;
-}
 
 int c;
 int n[2];
@@ -56,36 +43,26 @@ void sort(int w) {
   }
 }
 
-/*@
-  axiomatic Count_of {
-    logic integer count_of_upto(integer w, char c, integer upto) =
-      upto > 0 ? (s[w][upto]==c ? 1 : 0) + count_of_upto(w,c,upto-1)
-               : (s[w][upto]==c ? 1 : 0);
-    logic integer count_of(integer w, char c) = count_of_from(w,c,lens[w]-1);
-  }
- */
-
-
   //ghost char cou[2][255];
   //ghost for(char cc = 0; cc <= 255; cc++) for(int i=0; i<len(s[0]); i++) for(int iw=0; iw<2; iw++) cou[iw][cc]++; 
   //predicate samecount = \forall char cc; 0 <= cc <= 255 ==> cou[0][cc]==cou[1][cc];
 /*@
+  logic integer count_of_upto(char sw[], char c, integer upto) = \numof(0, upto, (\lambda integer i; sw[i]==c));
+  logic integer count_of(char sw[], char c, int n) = count_of_upto(sw,c,(int)(n-1));
   predicate samecount = \forall char cc; 0 <= cc <= 255 ==>
-    count_of(0, cc)==count_of(1, cc);
+    count_of(s[0], cc, lens[0])==count_of(s[1], cc, lens[1]);
  */
 /*@
   behavior len_mismatch:
-    assumes len(s[0])!=len(s[1]);
+    assumes lens[0]!=lens[1];
     ensures \result == 0;
   behavior len_match:
-    assumes len(s[0])==len(s[1]);
-    ensures \result == (samecount ? 1 : 0);
+    assumes lens[0]==lens[1];
+    ensures (\result == 1 && samecount) || \result == 0 && !samecount;
   complete behaviors len_mismatch, len_match;
   disjoint behaviors len_mismatch, len_match;
  */
 int anag() {
-  lens[0] = len(s[0]);
-  lens[1] = len(s[1]);
   if(lens[0]!=lens[1]) return 0;
   sort(0); sort(1);
   for(c = 0; c < lens[0]; c++)
@@ -93,8 +70,21 @@ int anag() {
   return 1;
 }
 
+int scans(char s[]) {
+  int i = 0;
+  char c = getchar();
+  while(c != EOF && c != '\n') {
+    s[i++] = c;
+    c = getchar();
+  }
+  //s[i] = 0;
+  return i;
+}
+
 int main() {
-  scanf("%s\n", s[0]);
-  scanf("%s\n", s[1]);
+  //scanf("%s\n", s[0]);
+  //scanf("%s\n", s[1]);
+  lens[0] = scans(s[0]);
+  lens[1] = scans(s[1]);
   printf("%d\n", anag());
 }
