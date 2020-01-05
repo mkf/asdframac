@@ -13,12 +13,13 @@ void swap(int w, int f, int t) {
 
 void heapify(int w) {
   while(1) {
-    int i = c * 2 + 1;
+    int i = c * 2;
     int nc;
-  again:
-    nc = c;
-    if(i<n[w] && s[w][i] > s[w][nc]) nc = i;
-    if(i%2) { i++; goto again; }
+    do {
+      i++;
+      nc = c;
+      if(i<n[w] && s[w][i] > s[w][nc]) nc = i;
+    } while(i%2);
     if(c != nc) swap(w, c, nc);
     else break;
     c = nc;
