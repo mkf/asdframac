@@ -10,15 +10,22 @@ value_t t[STACK_SIZE] = { 0 };
 index_t c = -1;
 
 /*@
+  requires w>0;
+  requires c>=-1;
+  requires c<STACK_SIZE;
   behavior limit_reached:
     assumes c==(STACK_SIZE-1);
     assigns \nothing;
+    ensures \result==0;
   behavior regular:
     assumes c<(STACK_SIZE-1);
-    assigns t[old(c)], c;
-  requires w>0;
-  complete behaviors limit_reached regular;
-  disjoint behaviors limit_reached regular;
+    assigns t[\old(c)], c;
+    ensures c==\old(c)+1;
+    ensures c<STACK_SIZE;
+    ensures \result==1;
+    ensures (\forall integer i; 0 <= i < STACK_SIZE ==> (i != \old(c) ==> \old(t[i])==t[i]));
+  complete behaviors limit_reached, regular;
+  disjoint behaviors limit_reached, regular;
  */
 boolean_t push(value_t w) {
   boolean_t res = c<(STACK_SIZE-1);
@@ -26,6 +33,21 @@ boolean_t push(value_t w) {
   return res;
 }
 
+/*@
+  requires c>=-1;
+  requires c<STACK_SIZE;
+  behavior empty:
+    assumes c==-1;
+    assigns \nothing;
+    ensures \result==0;
+  behavior regular:
+    assumes c>=0;
+    assigns c;
+    ensures \result==\old(t[\old(c)]);
+    ensures c==\old(c)-1;
+  complete behaviors empty, regular;
+  disjoint behaviors empty, regular;
+ */
 value_t pop() {
   return c>=0 ? t[c--] : 0;
 }
